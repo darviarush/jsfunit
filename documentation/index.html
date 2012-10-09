@@ -1,0 +1,329 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<title>Тестирование веб-проектов. jsFUnit</title>
+</head>
+<body>	
+	<p><b>Sorry.</b> Documentation only at russian language. <b>Look</b> program code in WorkWithHtml.js and assert.js
+	</p>
+	<div class="content">
+		Тестирование веб-проектов. <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b><br>
+<br>
+В профессиональном программировании огромную роль играют
+автоматезированные тесты. Они заменяют и команду профессиональных
+тестеров и подсказывают о возникших неполадках в других частях
+обширного проекта во время разработки.<br>
+Работу веб-приложения необходимо тестировать на разных браузерных движках: Gecko, Presto, KHTML, WebKit и Trident.<br>
+<br>
+Разновидностью автоматизированных тестов являются функциональные тесты.
+Их главная особенность — эмуляция работы пользователя с приложением
+через интерфейс. <br>
+В веб-программировании для написания функциональных тестов используют Selenium.<br>
+Огромный недостаток Seleniuma — это его невысокая скорость выполнения таких тестов.<br>
+<br>
+Более быстрым фреймворком оказался jsUnit. <br>
+Правда, jsUnit предназначен для написания unit-тестов, а не
+функциональных. Обладает он и рядом других мелких недостатков. Как то —
+обращение к тестам по их пути, а не выбор теста из списка.<br>
+<br>
+Всё это привело к созданию <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>.<br>
+<br>
+<b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>
+состоит из интерфейса для запуска тестов и двух библиотек: библиотеки
+проверки условий (различные функции assert) и библиотеки функций
+эмулирующих работу пользователя с веб-интерфейсом. И скрипта на perl
+(update.pl), регистрирующего новые тесты.<br>
+<br>
+<b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b> я расположил на сурцефорже, откуда и предлагаю загрузить его всем желающим: <a href="http://sourceforge.net/projects/jsfunit/files/">http://sourceforge.net/projects/jsfunit/files/</a><br>
+<br>
+После того как скачаете <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>-2.1.zip, распакуйте его в public_html вашего веб-проекта. У вас появится каталог public_html/tests. <br>
+Надеюсь, что все читатели осведомлены, что такое public_html. Но для
+тех, кто случайно начал читать статью, предлагаю взять виндовую машину,
+установить на неё xampp из <a href="http://www.apachefriends.org/en/xampp.html">http://www.apachefriends.org/en/xampp.html</a> в <a href="http://c/">c:\xampp</a> и распаковать <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>-2.1.zip в <a href="http://c/">c:\xampp\htdocs.</a><br>
+<br>
+В браузере откройте <a href="http://localhost/tests">http://localhost/tests</a> (или же какой другой адрес имеет ваш хост). Вы увидите интерфейс <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>. Он довольно простой и вы легко в нём разберётесь.<br>
+<br>
+Для создания теста:<br>
+1. Добавте тест в каталог tests/tests-js<br>
+2. Тест должен иметь расширение .js<br>
+3. Выполните update.pl (он поставляется с <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b> и находится в каталоге tests. Это скрипт на perl. Для начинающих поясню:<br>
+Пуск -&gt; Выполнить…<br>
+cmd<br>
+<a href="http://c/">c:\xampp\perl\bin\perl.exe</a> <a href="http://c/">c:\xampp\htdocs\tests\update.pl</a><br>
+)<br>
+4. Обновите <a href="http://localhost/tests">http://localhost/tests</a> (F5)<br>
+<br>
+Как выглядят тесты?<br>
+<br>
+<b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b>
+похож на jsUnit, jUnit, CUNIT, PHPUnit, NUnit, PyUnit, fUnit, DUnit,
+FPCUnit, Test::Class и Test::Unit, CPPUnit, FlexUnit, COSUnit и т.п.<br>
+<br>
+Собственно файл с тестом имеет одну или несколько функций с префиксом test в названии. Которые последовательно запускаются.<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">testNagan</font>() { <br>
+… <br>
+}<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">testBlaster</font>() { <br>
+… <br>
+}<br>
+<br>
+В функциях описываются манипуляции с веб-приложением и проверки на правильность реакции веб-приложения.<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">testNagan</font>() { <br>
+var nagan = new <font color="brown">Nagan</font>()<br>
+<font color="brown">assertEquals</font>(<font color="green">«Название экземпляра Nagan не типа 'строка'. Соболезнуем»</font>, <font color="blue"><b>typeof</b></font>(nagan.name), <font color="green">«string»</font>)<br>
+}<br>
+<br>
+Если требуется в начале каждого теста сделать какие-либо инициализирующие действия можно использовать setUp.<br>
+А в конце — tearDown.<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">setUp</font>() {<br>
+protiv_loma_net_prijoma = new <font color="brown">Lom</font>()<br>
+}<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">Nagan</font>() {<br>
+<font color="brown">assert</font>(<font color="green">«Где вы так метать лом научились?»</font>, protiv_loma_net_prijoma.<font color="brown">rasstojanie_v_metrax</font>(20))<br>
+}<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">Sablja</font>() {<br>
+<font color="brown">assert</font>(<font color="green">«Да вы совсем слабенький, батенька!»</font>, protiv_loma_net_prijoma.<font color="brown">rasstojanie_v_metrax</font>(1.5))<br>
+}<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">tearDown</font>() {<br>
+protiv_loma_net_prijoma.<font color="brown">polozhit</font>()<br>
+}<br>
+<br>
+<h3>А вот функции <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b> для проверок</h3><br>
+<font color="brown">assert</font>([комментарий], значение) — Если значение 0, <font color="green">""</font>,
+undefined, false или null, то assert прекращает выполнение теста и
+выводит ошибку в Лог с комментарием, если комментарий указан. Условие
+должно быть выражением возвращающим значение типа boolean. Пример: <font color="brown">assert</font>(<font color="green">«Страшная ошибка!!!»</font>, a==10 || x&lt;2) <br>
+<font color="brown">assertTrue</font>([комментарий], условие) — синоним assert <br>
+<font color="brown">assertFalse</font>([комментарий], условие) — эквивалент assert, но ошибкой считается, когда условие истинно <br>
+<font color="brown">assertEquals</font>([комментарий], ожидаемое_значение, полученное_значение) — ошибка, если полученное значение не совпадает с ожидавшимся <br>
+<font color="brown">assertNotEquals</font>([комментарий], ожидаемое_значение, полученное_значение) — ошибка, если полученное значение совпадает с ожидавшимся <br>
+<font color="brown">assertIdentity</font>([комментарий], ожидаемое_значение, полученное_значение) — ошибка, если полученное значение не тождественно с ожидавшимся <br>
+<font color="brown">assertNotIdentity</font>([комментарий], ожидаемое_значение, полученное_значение) — ошибка, если полученное значение тождественно с ожидавшимся <br>
+<font color="brown">assertNull</font>([комментарий], значение) — ошибка, если значение не null<br>
+<font color="brown">assertNotNull</font>([комментарий], значение) — ошибка, если значение — null <br>
+<font color="brown">assertUndefined</font>([комментарий], значение) — ошибка, если значение не undefined <br>
+<font color="brown">assertNotUndefined</font>([комментарий], значение) — ошибка, если значение — undefined: <font color="brown">assertNotUndefined</font>(undefined) <br>
+<font color="brown">assertNaN</font>([комментарий], значение) — ошибка, если значение не NaN <br>
+<font color="brown">assertNotNaN</font>([комментарий], значение) — ошибка, если значение — NaN: <font color="brown">assertNotNaN</font>(Number.NaN) <br>
+<font color="brown">fail</font>(комментарий) — ошибка <br>
+<font color="brown">warn</font>(сообщение, [значение]) — Пишет в лог красным цветом сообщение. Если указано значение, то выводит его как <font color="green">«сообщение: значение»</font> <br>
+<font color="brown">inform</font>(сообщение, [значение]) — Пишет в лог зелёным цветом <br>
+<font color="brown">info</font>(сообщение, [значение]) — Пишет в лог зелёным цветом <br>
+<font color="brown">debug</font>(сообщение, [значение]) — Пишет в лог синим цветом<br>
+<br>
+<h3>Функции манипулирования интерфейсом</h3><br>
+Данные функции подобны некоторым функциям Seleniumа<br>
+<br>
+Функции для манипулирования окнами и элементами<br>
+<br>
+Функции, заканчивающиеся на Def, в случае неудачного завершения возвращают false, а не вызывают исключение (см. assert).<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">testOpen</font>() {<br>
+win = <font color="brown">getWindow</font>(<font color="green">«MAIN»</font>)<font color="brown"><b> // Первое, что делает пользователь, это открывает страницу веб-приложения. </b></font><br>
+<font color="brown"><b>// getWindow ждёт пока страница полностью не загрузится<br>
+// Страница должна быть в том же домене в котором находится <b><font color="red">js</font><font color="blue">F</font><font color="green">Unit</font></b> </b></font><br>
+iframe = <font color="brown">getFrameWindow</font>(win, <font color="green">«frame_for_tables»</font>)<font color="brown"><b> // Иногда необходимо бывает и с фреймами поработать</b></font><br>
+}<br>
+<br>
+<font color="blue"><b>function</b></font> <font color="brown">testForm</font>() {<br>
+<font color="brown">select</font>(win.document.<font color="brown">getElementById</font>(<font color="green">«City»</font>), <font color="green">«St. Peterburg»</font>)<font color="brown"><b> // выбираем город из выпадающего списка</b></font><br>
+<font color="brown">clickToButton</font>(win, <font color="green">«Применить»</font>)<font color="brown"><b> // нажимаем на кнопку [Применить]</b></font><br>
+var pwin = <font color="brown">openButton</font>(win, <font color="green">«Пересчитать»</font>)<font color="brown"><b> // нажимаем на кнопку [Пересчитать] и ждём пока загрузится окно с именем Pereschitatq</b></font><br>
+<font color="brown">clickToLink</font>(pwin, <font color="green">«Меню 1»</font>, 2)<font color="brown"><b> // Нажимаем на второй элемент на странице pwin с innerHTML = <font color="green">«Меню 1»</font></b></font><br>
+}<br>
+<br>
+А теперь подробнее:<br>
+<br>
+<font color="brown">getWindowDef</font>(name, [time]) <br>
+<br>
+<font color="brown">getWindow</font>(name, [time]) <br>
+<br>
+Возвращает окно по его имени <br>
+<ul>
+<li>name — имя окна. Параметр подвергается транслитерации. Например: <font color="green">«Алка*@дмин „</font> -&gt; <font color="green">“ALKA__DMIN»</font></li>
+<li>time — сколько ждать полной загрузки страницы в окне.
+Необязательный параметр. 5000 по умолчанию. Если страница загрузится
+быстрее чем за time, то ждать она не будет</li>
+<li>window.name нужно присвоить транслитерированный
+window.document.title. Благодаря чему в name можно указывать для таких
+окон их заголовок. Это делается функцией set_translit_name_window()</li>
+<li>window.document.title — это заголовок окна браузера</li>
+<li>window.name — имя окна. Должно быть идентификатором, то есть: /[a-z]\w*/i или пусто</li>
+</ul><br>
+<br>
+<h4>Пример:</h4><br>
+<font color="orange"><b>Окно:</b></font> <br>
+<font color="blue">&lt;html&gt;</font><br>
+<font color="blue">&lt;head&gt;</font><br>
+<font color="blue">&lt;title&gt;</font>@@Админ или как** <font color="blue">&lt;/title&gt;</font><br>
+<font color="blue">&lt;script&gt;</font><br>
+window.name = <font color="green">"__ADMIN_ILI_KAK__"</font><br>
+<font color="blue">&lt;/script&gt;</font><br>
+<font color="blue">&lt;/head&gt;</font><br>
+<font color="blue">&lt;body&gt;</font><br>
+<font color="blue">&lt;/body&gt;</font><br>
+<font color="blue">&lt;/html&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+win = <font color="brown">getWindow</font>(<font color="green">"@@Админ или как** "</font>)<br>
+<br>
+<font color="brown">waitCondition</font>(cond, time) — ожидать выполнения cond <br>
+<br>
+если cond не станет true за time микросекунд — выход <br>
+<br>
+cond работает только с глобальными переменными, если задан строкой. Для локальных переменных используйте функцию: <br>
+var a = 10, b = 10<br>
+<font color="brown">waitCondition</font>(<font color="blue"><b>function</b></font>(){ return a == b }, 500)<br>
+<br>
+<font color="brown">sleep</font>(time) <br>
+<br>
+спать time микросекунд. Аналогичен: <br>
+<font color="brown">waitCondition</font>(<font color="green">«false»</font>, 500)<br>
+<br>
+<font color="brown">waitLoadWindowDef</font>(win, time) <br>
+<br>
+<font color="brown">waitLoadWindow</font>(win, time) <br>
+<br>
+ожидает загрузки окна win time микросекунд. Если окно загрузится быстрее, чем за time, то ожидание завершиться тот час же <br>
+<ul>
+<li>win – объект окна. Используйте window.frames[<font color="green">«имя фрейма»</font>] или window.<font color="brown">open</font>(), чтобы его получить</li>
+<li>time – время в микросекундах</li>
+</ul><br>
+<br>
+<b><font color="red">Внимание!</font></b> Фунцкция getWindow уже использует waitLoadWindow. waitLoadWindow нужно использовать после window.open: <br>
+win = window.<font color="brown">open</font>(<font color="green">«localhost/cgi-bin/mypage.pl»</font>, <font color="green">«name_window»</font>)<br>
+<font color="brown">waitLoadWindow</font>(win, 5000)<br>
+<br>
+<font color="brown">getFrameWindowDef</font>(win, frame, [time]) <br>
+<br>
+<font color="brown">getFrameWindow</font>(win, frame, [time]) <br>
+<br>
+Ждёт загрузки страницы в указанный фрейм и возвращает объект его окна <br>
+<ul>
+<li>win — окно в котором находится фрейм</li>
+<li>frame — имя фрейма, заданное атрибутом name или id</li>
+<li>time — необязательный параметр. Задаёт время ожидания загрузки страницы в фрейм. По умолчанию — 5000 микросекунд</li>
+</ul><br>
+<br>
+<h4>Пример:</h4><br>
+Страница в win: <br>
+<font color="blue">&lt;html&gt;</font><br>
+<font color="blue">&lt;body&gt;</font><br>
+<font color="blue">&lt;iframe name=<font color="green">«frame_tab»</font> src=<font color="green">«page_for_this_frame»</font>&gt;</font><font color="blue">&lt;/iframe&gt;</font><br>
+<font color="blue">&lt;/body&gt;</font><br>
+<font color="blue">&lt;/html&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+var win_in_frame = <font color="brown">getFrameWindow</font>(win, <font color="green">«frame_tab»</font>)<br>
+<br>
+<font color="brown">selectDef</font>(sel, text) <br>
+<br>
+<font color="brown">select</font>(sel, text) <br>
+<br>
+Выбирает опцию тега <font color="blue">&lt;select&gt;</font> по её тексту <br>
+sel – элемент. Получить его можно по имени: <font color="brown">select</font>(document.all.reason, <font color="green">«Вот так»</font>) <br>
+<font color="blue">&lt;select name=<font color="green">«reason»</font>&gt;</font><br>
+<font color="blue">&lt;option value=1&gt;</font>А вот и нет<br>
+<font color="blue">&lt;option value=2&gt;</font>Вот так<br>
+<font color="blue">&lt;/select&gt;</font><br>
+<br>
+Того же можно добиться и так: document.all.reason.value = 2 <br>
+<br>
+<font color="brown">linkDef</font>(win, text_in_link, [tag], [event], [number]) <br>
+<br>
+<font color="brown">link</font>(win, text_in_link, [tag], [event], [number]) <br>
+<br>
+возвращет ссылку на элемент с текстом text_in_link: <font color="blue">&lt;div&gt;</font>text_in_link<font color="blue">&lt;/div&gt;</font> или <font color="blue">&lt;a&gt;</font>text_in_link<font color="blue">&lt;/a&gt;</font> или в других элементах <br>
+<ul>
+<li>tag и event — параметры необязательные</li>
+<li>tag — теги, среди которых будет производиться поиск. Например: <font color="green">«input»</font>. По умолчанию – все (<font color="green">"*"</font>)</li>
+<li>event представляет собой строку кода</li>
+<li>event можно устанавливать в link.innerText, link.innerHTML, link.value, link.options[link.selectedIndex].text, link.title и т.п.</li>
+<li>number — номер найденного элемента. Так 1 (по умолчанию) — первый найденный, 2-й — второй найденный и т.д.</li>
+</ul><br>
+<br>
+<h4>Пример:</h4><br>
+<font color="orange"><b>Окно:</b></font> <br>
+<font color="blue">&lt;html&gt;</font><br>
+<font color="blue">&lt;head&gt;</font><br>
+<font color="blue">&lt;script&gt;</font><br>
+window.name=<font color="green">«Admin»</font><br>
+<font color="blue">&lt;/script&gt;</font><br>
+<font color="blue">&lt;/head&gt;</font><br>
+<font color="blue">&lt;body&gt;</font><br>
+<font color="blue">&lt;div id=Div1&gt;</font>Пол<font color="blue">&lt;b&gt;</font>ь<font color="blue">&lt;/b&gt;</font>зователи<font color="blue">&lt;/div&gt;</font><br>
+<font color="blue">&lt;div id=Div2&gt;</font>Пол<font color="blue">&lt;b&gt;</font>ь<font color="blue">&lt;/b&gt;</font>зователи<font color="blue">&lt;/div&gt;</font><br>
+<font color="blue">&lt;/body&gt;</font><br>
+<font color="blue">&lt;/html&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+win = <font color="brown">getWindow</font>(<font color="green">«Админ»</font>)<font color="brown"><b> // Получаем окно</b></font><br>
+div = <font color="brown">link</font>(win, <font color="green">«Пользователи»</font>, 2)<font color="brown"><b> // получаем второй элемент с текстом «Пользователи» в нём (Div2)</b></font><br>
+div.style.color = <font color="green">«red»</font><font color="brown"><b> // делаем его красного цвета</b></font><br>
+<br>
+<font color="brown">clickToLinkDef</font>(win, text_in_link, [number]) <br>
+<br>
+<font color="brown">clickToLink</font>(win, text_in_link, [number]) <br>
+<br>
+нажимает на элемент указанный по контенту можно указать на какой по счёту элемент нажимать (number) <br>
+<br>
+<h4>Пример:</h4><br>
+<font color="orange"><b>Окно:</b></font> <br>
+<font color="blue">&lt;a href=<font color="green">"/users"</font>&gt;</font>Пользователи<font color="blue">&lt;/a&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+<font color="brown">clickToLink</font>(win, <font color="green">«Пользователи»</font>)<br>
+<br>
+<font color="brown">clickToButtonDef</font>(win, text_in_value, [number]) <br>
+<br>
+<font color="brown">clickToButton</font>(win, text_in_value, [number]) <br>
+<br>
+нажимает на кнопку можно указать на какой по счёту элемент нажимать (number) <br>
+<br>
+<h4>Пример:</h4><br>
+<font color="orange"><b>Окно:</b></font> <br>
+<font color="blue">&lt;input type=<font color="green">«button»</font> value=<font color="green">«Пользователи»</font>&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+<font color="brown">clickToButton</font>(win, <font color="green">«Пользователи»</font>)<br>
+<br>
+<font color="brown">openLink</font>(win, text_in_link, [sleepTime], [time], [number]) <br>
+<br>
+нажимает на элемент и возвращает объект одноимённого окна<br>
+<ul>
+<li>win — окно в котором нажимать</li>
+<li>text_in_link — текст в элементе</li>
+<li>sleepTime — сколько ждать до того как начать запрашивать окно. По умолчанию — 0 микросекунд</li>
+<li>time — время отпущенное на ожидание открытия окна. По умолчанию — 5000 микросекунд</li>
+<li>number — номер найденного элемента. По умолчанию — первый</li>
+</ul><br>
+<br>
+<h4>Пример:</h4><br>
+<font color="orange"><b>Окно:</b></font><br>
+<font color="blue">&lt;script src=<font color="green">«tests/WorkWithHtml.js»</font>&gt;</font> <br>
+<font color="blue">&lt;script&gt;</font><br>
+window.name = <font color="brown">translate</font>(<font color="green">«Пользователи»</font>)<br>
+<font color="brown"><b>// window.name = <font color="green">«Polqzovateli»</font></b></font><br>
+<font color="blue">&lt;/script&gt;</font><br>
+<br>
+<font color="orange"><b>Тест:</b></font> <br>
+win = <font color="brown">openLink</font>(win, <font color="green">«Пользователи»</font>)<br>
+<br>
+<font color="brown">openButton</font>(win, text_in_value, [sleepTime], [time], [number]) <br>
+<br>
+нажимает на кнопку и возвращает объект одноимённого окна <br>
+<ul>
+<li>win — окно в котором нажимать </li>
+<li>text_in_value — название кнопки</li>
+<li>sleepTime — сколько ждать до того как начать запрашивать окно. По умолчанию — 0 микросекунд</li>
+<li>time — время отпущенное на ожидание открытия окна. По умолчанию — 5000 микросекунд</li>
+<li>number — номер найденной кнопки. По умолчанию — первый</li>
+</ul>
+	</div>

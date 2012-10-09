@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jsFUnit</title>
+
+<style type="text/css"><!--
+body {background-color:white;color:black;margin:5px;margin-bottom:0;padding:0}
+table, tr, td {margin:0;padding:0}
+a:link {color:blue}
+a:visited {color:blue}
+a:hover {color:red}
+td {vertical-align:middle;align:left;}
+tr, table, td, th {margin:0;padding:0;border-collapse: collapse;}
+.title {background-color:#eeeeee;width:100%;}
+.title td {padding:20px;}
+img {border:0}
+#LOG {background-color:white}
+#start_win td {padding:10px}
+.rimg {float:right; margin-left:10px}
+.click {cursor:pointer;}
+--></style>
+
+<script language="JavaScript" type="text/javascript" src="translates.js"></script>
+<script language="JavaScript" type="text/javascript" src="Tests.js"></script>
+<script language="JavaScript" type="text/javascript" src="run.js"></script>
+
+<script>
+function set_ch_cookie(ch) {
+	document.cookie = ch.id+"="+(ch.checked? 1:0)
+}
+
+function set_lang_cookie(lang) {
+	document.cookie = "lang="+lang
+	__lang__ = lang
+	translate_all()
+}
+
+function checkbox_set_cookie() {
+    var cookie = cookies()
+    for(var i=0; i<arguments.length; i++) {
+        var arg = arguments[i]
+        if(cookie[arg]) document.getElementById(arg).checked = (cookie[arg]==1)
+    }
+}
+
+function load_page() {
+    translate_all()
+    document.getElementById("button").disabled = false
+    if(navigator.appName=="Netscape" && navigator.vendor=="" && navigator.product=="Gecko") {
+        var elem = document.getElementById("LOG")
+        elem.style.height = elem.scrollHeight
+    }
+}
+
+</script>
+
+</head>
+<body onload="try{ load_page() }catch(e){alert('onload: '+e+' '+e.message)}">
+
+<noscript>
+<font color="red">
+<h1>
+Your browser not support JavaScript. JsFUnit not work in it.
+<br>
+Ваш браузер не поддерживает JavaScript. JsFUnit не будет работать на нём.
+</h1>
+</font>
+</noscript>
+
+<div id=start_win style="position:absolute; width:80%;left:10%;top:10%;height:80%; background-color:white; overflow:auto; border: 5px solid gray; padding:10px; display:none">
+<div style="color:red; cursor:pointer; text-align:right" width=100px onclick="document.getElementById('start_win').style.display='none'">
+[<span>закрыть</span>]
+</div>
+
+<div style="margin-top:-10px">
+<script>
+document.write(translate_panel())
+</script>
+</div>
+
+<div style="padding-top:10%; text-align:justify">
+<span>Добро пожаловать!<br><br>Тут можно протестировать <b>jsFUnit</b>.<br><br>Для демонстрации написаны несколько тестов.<br><br><b>Внимание!</b> 3 теста специально завершаются с ошибкой.<img class="rimg" src="img/example_errors.png"> Это сделано, чтобы продемонстрировать красные промежутки в прогресс-баре.<br><br>Поднесите к прогресс-бару мышку и лог переместится к сообщениям соответствующего теста.</span>
+</div>
+
+</div>
+
+
+<TABLE width=100% height=100%>
+<TR><TD height=10px>
+
+<table class="title">
+<tr><td width="20%" style="font:normal small-caps 24pt 'Imprint MT Shadow','Colonna MT','Algerian','Monotype Corsiva','Niagara Engraved','Kunstler Script','DS-Digital','Old English Text MT','Garamond'"><font color=red>js</font><font color=blue>F</font><font color=green>Unit</font>
+<td width="50%">
+<script>
+document.write(translate_panel())
+</script>
+
+<br>
+<b><span>Фреймворк для тестирования веб-приложений. Версия</span> 2.3.0<p/>
+<font color="#000099"><span>Выполняется в</span>
+<script>
+document.write(navigator.userAgent)
+</script>
+</font>
+</b>
+<td align=right>
+
+<script>
+if(location.host=="jsfunit.sourceforge.net") {
+    document.write('<small><a href="http://sourceforge.net/projects/jsfunit/files/" target=_blank><span>Загрузить</span></a> <a href="documentation/"  target=_blank><span>Документация</span></a> <a href="licenses/"  target=_blank><span>Лицензия</span></a></small><p/>')
+    document.getElementById("start_win").style.display = 'block'
+}
+</script>
+<a href="http://jsfunit.sf.net" target=_blank>jsfunit.sf.net</a><p/><a href="http://darviarush.narod.ru" target=_blank>darviarush.narod.ru</a>
+</table>
+
+<p/>
+<span>Выберите тест:</span>&nbsp;&nbsp;<select id="test_select" style="width:500px">
+<script>
+var i
+for(i=0; i<Tests.length; i++) document.writeln('<option value='+i+'>'+Tests[i][0]+'</option>')
+</script>
+</select>
+<input id=button type="button" value="Запуск" onclick="run()">
+<input id=button type="button" value="Прервать" onclick="stop()">
+<p/>
+
+<table>
+<tr><td><span>Прогресс:</span>&nbsp;&nbsp;&nbsp;<td>
+<script>
+try{
+progress = new progressBar('solid 2px #808080', 700, 10)
+}catch(e){alert('progressBar: '+e+' '+e.message)}
+</script>
+</table>
+
+<p/>
+<table style="width:750px">
+<tr>
+<td><b><small><span>Запущено:</span> <span id=runs>0</span></small></b>
+<td><b><small><span>Успешно:</span> <span id=noerrors>0</span></small></b>
+<td><b><small><span>Ошибок:</span> <span id=errors>0</span></small></b>
+</table>
+<p/>
+
+<span>Лог:</span> &nbsp; &nbsp; &nbsp; &nbsp;<small>
+	<input type=checkbox checked id=ch_timer onclick="set_ch_cookie(this)"> <span>Счётчик</span> 
+	<input type=checkbox checked id=ch_loading onclick="set_ch_cookie(this)"> <span>Загрузка</span> 
+	<input type=checkbox checked id=ch_tests onclick="set_ch_cookie(this)"> <span>Имена тестов</span>
+</small><br>
+<script>
+try{
+    checkbox_set_cookie('ch_timer', 'ch_loading', 'ch_tests')
+}catch(e){alert('set_cookie: '+e+' '+e.message)}
+</script>
+
+<iframe id=frame_for_js name=frame_for_js style="display:none"></iframe>
+
+<TR><TD>
+
+<pre id="LOG" style="overflow:scroll;width:100%;height:100%"></pre>
+</TABLE>
+</body>
+</html>

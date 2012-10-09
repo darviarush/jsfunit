@@ -1,0 +1,1 @@
+function test2() { alert('hi!') }
